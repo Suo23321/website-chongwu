@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>爪小爱 - 找到您信任的宠物照料专家</title>
+<link rel="icon" href="/assets/favicon-paw.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══ 导航栏 ═══ -->
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-logo brand-logo-link"><img src="/assets/brand-logo.png" alt="爪小爱" class="brand-logo-img"></a>
+    <ul class="nav-links">
+      <li><a href="sitters.html">寻找服务者</a></li>
+      <li><a href="#services">服务项目</a></li>
+      <li><a href="#how-it-works">使用流程</a></li>
+      <li><a href="#reviews">用户评价</a></li>
+      <li><a href="#" onclick="openModal('providerModal');return false">成为服务者</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn btn-ghost" onclick="openModal('loginModal')">登录</button>
+      <button class="btn btn-red" onclick="openModal('registerModal')">免费注册</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ 英雄区 ═══ -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-inner">
+      <h1>让您的<em>宠物</em>得到<br>最好的照料</h1>
+      <p>遛狗·寄养·上门服务，全国50,000+认证专家随时为您服务</p>
+
+      <div class="search-bar">
+        <div class="sb-field">
+          <svg class="sb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div style="flex:1">
+            <label class="sb-label">所在城市</label>
+            <select id="s-city">
+              <option value="">选择城市</option>
+              <option>北京</option><option>上海</option><option>广州</option>
+              <option>深圳</option><option>成都</option><option>杭州</option>
+              <option>武汉</option><option>南京</option><option>西安</option>
+            </select>
+          </div>
+        </div>
+        <div class="sb-field">
+          <svg class="sb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+          <div style="flex:1">
+            <label class="sb-label">服务类型</label>
+            <select id="s-service">
+              <option value="">所有服务</option>
+              <option>寄宿寄养</option><option>遛狗服务</option><option>上门喂食</option>
+              <option>日托服务</option><option>宠物美容</option><option>宠物训练</option>
+            </select>
+          </div>
+        </div>
+        <div class="sb-field">
+          <svg class="sb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+          <div style="flex:1">
+            <label class="sb-label">宠物类型</label>
+            <select id="s-pet">
+              <option value="">所有宠物</option>
+              <option>小型犬</option><option>中型犬</option><option>大型犬</option>
+              <option>猫咪</option><option>兔子</option><option>鸟类</option>
+            </select>
+          </div>
+        </div>
+        <button class="sb-btn" onclick="doSearch()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          搜索
+        </button>
+      </div>
+
+      <div class="hero-trust">
+        <span>✅ 实名认证</span>
+        <span>📸 每日照片报平安</span>
+        <span>🛡️ 服务保险保障</span>
+        <span>⭐ 平均评分 4.9 分</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 服务项目 ═══ -->
+<section class="services" id="services">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label">服务项目</div>
+      <h2>您需要什么服务？</h2>
+      <p>从日常遛狗到长途出差，爪小爱为您提供全方位专业照料</p>
+    </div>
+    <div class="svc-grid" id="svcGrid"></div>
+  </div>
+</section>
+
+<!-- ═══ 使用流程 ═══ -->
+<section class="hiw" id="how-it-works">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label">使用流程</div>
+      <h2>三步轻松预约</h2>
+      <p>从搜索到服务，全程只需几分钟，操作超简单</p>
+    </div>
+    <div class="hiw-steps">
+      <div class="hiw-step">
+        <div class="hiw-step-icon">🔍</div>
+        <h3>搜索服务者</h3>
+        <p>输入城市和服务类型，快速找到附近经过实名认证的宠物照料专家，查看真实评价和服务照片</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-icon">💬</div>
+        <h3>沟通确认需求</h3>
+        <p>在线与服务者沟通，介绍您宠物的习惯和特殊需求，确认服务时间、地点和价格，再决定预约</p>
+      </div>
+      <div class="hiw-step">
+        <div class="hiw-step-icon">🐾</div>
+        <h3>放心交给他们</h3>
+        <p>服务期间每天收到照片和动态，实时了解爱宠状态。服务结束后留下真实评价，帮助更多宠物家庭</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 热门服务者（按接单量）═══ -->
+<section class="hot-sitters" id="hot-sitters">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" style="background:#fff5e6;color:#f59e0b">🔥 人气榜单</div>
+      <h2>热门服务者 TOP 榜</h2>
+      <p>这些服务者已累计完成数百次委托，宠物主们用好评投出的人气之星</p>
+    </div>
+    <div class="hot-grid" id="hotGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray)">加载中...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 本周推荐 ═══ -->
+<section class="weekly-pick" id="weekly-pick">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label" style="background:#ecfdf5;color:#059669">⭐ 编辑精选</div>
+      <h2>本周推荐 · 爪小爱优选</h2>
+      <p>基于评分和口碑，为您精心挑选的本周三位专业服务者</p>
+    </div>
+    <div class="weekly-grid" id="weeklyGrid">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--gray)">加载中...</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 精选服务者 ═══ -->
+<section class="featured" id="sitters">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label">精选服务者</div>
+      <h2>您附近的优质服务者</h2>
+      <p>每位服务者均通过身份核验和背景调查，专业、用心、有爱</p>
+    </div>
+    <div class="sitters-grid" id="featuredGrid"></div>
+    <div style="text-align:center;margin-top:36px">
+      <a href="sitters.html" class="btn btn-red btn-lg">查看全部服务者 →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 信任保障 ═══ -->
+<section class="trust">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:40px">
+      <div class="sec-label" style="background:rgba(255,255,255,.15);color:#fff">为什么选爪小爱</div>
+      <h2 style="color:#fff">有爪小爱，安心出行</h2>
+      <p style="color:rgba(255,255,255,.7)">我们用严格的审核和完善的保障体系，让每一次委托都安心</p>
+    </div>
+    <div class="trust-grid">
+      <div class="trust-item">
+        <div class="trust-ico">🔒</div>
+        <h3>实名身份认证</h3>
+        <p>所有服务者须提供真实身份证件，平台人工核验，确保安全可信</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-ico">📱</div>
+        <h3>实时照片动态</h3>
+        <p>服务者每天通过平台发送照片和视频，让您随时了解爱宠状态</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-ico">💰</div>
+        <h3>爪小爱保障计划</h3>
+        <p>每笔预约含宠物意外险保障，遇到问题平台全力协助处理</p>
+      </div>
+      <div class="trust-item">
+        <div class="trust-ico">⭐</div>
+        <h3>真实用户评价</h3>
+        <p>只有完成服务的宠物主才能留评，杜绝刷单，评价100%真实</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ APP 下载 ═══ -->
+<section class="app-banner">
+  <div class="wrap">
+    <div class="app-inner">
+      <div class="app-text">
+        <h2>随时随地，掌控一切</h2>
+        <p>下载爪小爱 APP，实时查看宠物状态、与服务者沟通、管理预约，一切尽在掌握</p>
+        <div class="app-btns">
+          <button class="app-btn" onclick="showToast('App Store 即将上线，敬请期待！')">
+            <span class="app-btn-icon">📱</span>
+            <span class="app-btn-text">
+              <small>下载到</small>
+              <strong>App Store</strong>
+            </span>
+          </button>
+          <button class="app-btn" onclick="showToast('Google Play 即将上线，敬请期待！')">
+            <span class="app-btn-icon">🤖</span>
+            <span class="app-btn-text">
+              <small>下载到</small>
+              <strong>Google Play</strong>
+            </span>
+          </button>
+          <button class="app-btn" onclick="showToast('微信小程序即将上线，敬请期待！')">
+            <span class="app-btn-icon">💬</span>
+            <span class="app-btn-text">
+              <small>搜索</small>
+              <strong>微信小程序</strong>
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="app-img">
+        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=80" alt="App预览">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 用户评价 ═══ -->
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-label">真实评价</div>
+      <h2>宠物主们都说好</h2>
+      <p>超过200万次服务，每一次都是对宠物最温暖的呵护</p>
+    </div>
+    <div class="reviews-grid" id="reviewsGrid"></div>
+  </div>
+</section>
+
+<!-- ═══ 成为服务者 CTA ═══ -->
+<section class="cta">
+  <div class="wrap">
+    <h2>🐾 成为服务者，让爱变成收入</h2>
+    <p>用您对宠物的热情帮助更多家庭，月均收入 3,000-8,000 元，时间完全自由</p>
+    <div class="cta-btns">
+      <button class="btn btn-red btn-xl" onclick="openModal('providerModal')">立即申请成为服务者</button>
+      <button class="btn btn-ghost btn-xl" onclick="openModal('learnModal')">了解更多详情</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 页脚 ═══ -->
+<footer>
+  <div class="wrap">
+    <div class="ft-grid">
+      <div class="ft-brand">
+        <div class="nav-logo brand-logo-static"><img src="/assets/brand-logo.png" alt="爪小爱" class="brand-logo-img"></div>
+        <p>爪小爱是中国领先的宠物照料服务平台，连接宠物主和专业服务者，让每一只宠物都能得到最用心的照料。</p>
+        <div class="ft-social">
+          <a href="#">微博</a><a href="#">微信</a><a href="#">抖音</a><a href="#">小红书</a>
+        </div>
+      </div>
+      <div class="ft-col">
+        <h4>服务项目</h4>
+        <ul>
+          <li><a href="sitters.html">寄宿寄养</a></li>
+          <li><a href="sitters.html">遛狗服务</a></li>
+          <li><a href="sitters.html">上门喂食</a></li>
+          <li><a href="sitters.html">日托服务</a></li>
+          <li><a href="sitters.html">宠物美容</a></li>
+          <li><a href="sitters.html">宠物训练</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>关于我们</h4>
+        <ul>
+          <li><a href="#">公司介绍</a></li>
+          <li><a href="#">加入我们</a></li>
+          <li><a href="#">新闻中心</a></li>
+          <li><a href="#">投资者关系</a></li>
+          <li><a href="#">合作伙伴</a></li>
+        </ul>
+      </div>
+      <div class="ft-col">
+        <h4>帮助支持</h4>
+        <ul>
+          <li><a href="#">使用帮助</a></li>
+          <li><a href="#">服务保障</a></li>
+          <li><a href="#">隐私政策</a></li>
+          <li><a href="#">用户协议</a></li>
+          <li><a href="#">联系客服</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="ft-bottom">
+      <span>© 2026 爪小爱 版权所有 · 京ICP备XXXXXXXX号</span>
+      <span><a href="#">隐私政策</a> · <a href="#">用户协议</a></span>
+    </div>
+  </div>
+</footer>
+
+<!-- ══════ 模态框 ══════ -->
+
+<!-- 登录 -->
+<div class="mask" id="loginModal">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h2>登录爪小爱</h2><button class="mc" onclick="closeModal('loginModal')">×</button></div>
+    <div class="mb">
+      <div class="fg"><label class="fl">手机号码</label><input class="fi" id="l-phone" placeholder="请输入手机号"></div>
+      <div class="fg"><label class="fl">密码</label><input class="fi" type="password" id="l-pwd" placeholder="请输入密码"></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center;margin-bottom:14px" onclick="doLogin()">登录</button>
+      <div style="text-align:center;font-size:14px;color:var(--gray)">还没账号？<a href="#" style="color:var(--red);font-weight:700" onclick="closeModal('loginModal');openModal('registerModal')">立即注册</a></div>
+      <div style="display:flex;align-items:center;gap:10px;margin:18px 0"><div style="flex:1;height:1px;background:var(--border)"></div><span style="font-size:13px;color:var(--gray)">或</span><div style="flex:1;height:1px;background:var(--border)"></div></div>
+      <div style="display:flex;gap:10px">
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal('loginModal');showToast('微信登录成功！🎉')">💬 微信登录</button>
+        <button class="btn btn-ghost" style="flex:1;justify-content:center" onclick="closeModal('loginModal');showToast('微博登录成功！🎉')">🔴 微博登录</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 注册 -->
+<div class="mask" id="registerModal">
+  <div class="modal" style="max-width:440px">
+    <div class="mh"><h2>免费注册</h2><button class="mc" onclick="closeModal('registerModal')">×</button></div>
+    <div class="mb">
+      <div class="frow">
+        <div class="fg"><label class="fl">姓名</label><input class="fi" id="r-name" placeholder="您的真实姓名"></div>
+        <div class="fg"><label class="fl">手机号</label><input class="fi" id="r-phone" placeholder="手机号码"></div>
+      </div>
+      <div class="fg"><label class="fl">密码</label><input class="fi" type="password" id="r-pwd" placeholder="设置密码（至少6位）"></div>
+      <div class="fg"><label class="fl">我是</label>
+        <select class="fs" id="r-type"><option>宠物主人</option><option>宠物服务者</option></select>
+      </div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center;margin-bottom:10px" onclick="doRegister()">立即注册</button>
+      <p style="text-align:center;font-size:12px;color:var(--gray)">注册即代表同意 <a href="#" style="color:var(--red)">《服务协议》</a> 和 <a href="#" style="color:var(--red)">《隐私政策》</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- 申请服务者 -->
+<div class="mask" id="providerModal">
+  <div class="modal" style="max-width:520px">
+    <div class="mh"><h2>申请成为服务者</h2><button class="mc" onclick="closeModal('providerModal')">×</button></div>
+    <div class="mb">
+      <div style="background:var(--red-light);border-radius:10px;padding:16px;margin-bottom:20px">
+        <div style="font-weight:800;color:var(--red);margin-bottom:8px">🎉 服务者收益一览</div>
+        <div style="font-size:14px;line-height:2">✅ 月均收入 3,000–8,000 元<br>✅ 时间完全自由，做自己的老板<br>✅ 平台提供保险和法律保障<br>✅ 专业培训、认证资料支持</div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">真实姓名</label><input class="fi" id="p-name" placeholder="姓名"></div>
+        <div class="fg"><label class="fl">手机号</label><input class="fi" id="p-phone" placeholder="联系方式"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">所在城市</label>
+          <select class="fs" id="p-city"><option>北京</option><option>上海</option><option>广州</option><option>深圳</option><option>成都</option><option>其他</option></select>
+        </div>
+        <div class="fg"><label class="fl">照料经验（年）</label>
+          <select class="fs"><option>不足1年</option><option>1-3年</option><option>3-5年</option><option>5年以上</option></select>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">擅长服务</label>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;padding:12px;border:2px solid var(--border);border-radius:9px">
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer"><input type="checkbox" style="accent-color:var(--red)"> 寄宿寄养</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer"><input type="checkbox" style="accent-color:var(--red)"> 遛狗服务</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer"><input type="checkbox" style="accent-color:var(--red)"> 上门喂食</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer"><input type="checkbox" style="accent-color:var(--red)"> 日托服务</label>
+          <label style="display:flex;align-items:center;gap:6px;font-size:14px;cursor:pointer"><input type="checkbox" style="accent-color:var(--red)"> 宠物美容</label>
+        </div>
+      </div>
+      <div class="fg"><label class="fl">自我介绍</label><textarea class="ft2" placeholder="介绍您的宠物照料经验、家庭环境..."></textarea></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="submitProvider()">提交申请</button>
+    </div>
+  </div>
+</div>
+
+<!-- 服务者详情 -->
+<div class="mask" id="sitterModal">
+  <div class="modal" style="max-width:680px">
+    <div class="mh"><h2 id="sitterModalTitle">服务者详情</h2><button class="mc" onclick="closeModal('sitterModal')">×</button></div>
+    <div class="mb" id="sitterModalBody"></div>
+  </div>
+</div>
+
+<!-- 预约 -->
+<div class="mask" id="bookingModal">
+  <div class="modal" style="max-width:500px">
+    <div class="mh"><h2>预约服务</h2><button class="mc" onclick="closeModal('bookingModal')">×</button></div>
+    <div class="mb">
+      <div id="bk-sitter-info" style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--gray-light);border-radius:10px;margin-bottom:20px">
+        <img id="bk-ava" src="" style="width:52px;height:52px;border-radius:50%;object-fit:cover">
+        <div style="flex:1"><div id="bk-name" style="font-weight:800;font-size:17px"></div><div id="bk-svc" style="color:var(--gray);font-size:14px"></div></div>
+        <div id="bk-price" style="font-size:22px;font-weight:900;color:var(--red)"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">您的姓名</label><input class="fi" id="bk-owner" placeholder="请输入姓名"></div>
+        <div class="fg"><label class="fl">联系电话</label><input class="fi" id="bk-phone" placeholder="手机号码"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">宠物名称</label><input class="fi" id="bk-pet-name" placeholder="宠物的名字"></div>
+        <div class="fg"><label class="fl">宠物品种</label><input class="fi" id="bk-breed" placeholder="如：拉布拉多"></div>
+      </div>
+      <div class="frow">
+        <div class="fg"><label class="fl">开始日期</label><input class="fi" type="date" id="bk-start"></div>
+        <div class="fg"><label class="fl">结束日期</label><input class="fi" type="date" id="bk-end"></div>
+      </div>
+      <div class="fg"><label class="fl">服务类型</label>
+        <select class="fs" id="bk-type"><option value="">请选择服务</option><option>寄宿寄养</option><option>遛狗服务</option><option>上门喂食</option><option>日托服务</option><option>宠物美容</option></select>
+      </div>
+      <div class="fg"><label class="fl">备注（可选）</label><textarea class="ft2" id="bk-note" placeholder="宠物特殊需求、喂食习惯..."></textarea></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="submitBooking()">确认预约</button>
+      <p style="text-align:center;font-size:13px;color:var(--gray);margin-top:10px">🛡️ 受爪小爱保障计划保护，付款安全有保障</p>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

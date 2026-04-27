@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>找服务者 - 爪小爱</title>
+<link rel="icon" href="/assets/favicon-paw.png">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.page-hero{background:linear-gradient(135deg,var(--navy) 0%,#2d4a6b 100%);color:#fff;padding:42px 0}
+.page-hero h1{font-size:36px;font-weight:900;margin-bottom:6px}
+.page-hero p{opacity:.82;font-size:16px}
+.layout{display:grid;grid-template-columns:268px 1fr;gap:28px;padding:32px 0 60px;align-items:start}
+.sidebar{background:#fff;border-radius:14px;padding:22px;box-shadow:0 2px 14px rgba(0,0,0,.08);position:sticky;top:100px}
+.sidebar h3{font-size:16px;font-weight:800;color:var(--navy);margin-bottom:18px;display:flex;justify-content:space-between;align-items:center}
+.fg-s{margin-bottom:22px}
+.fgt{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.cb-item{display:flex;align-items:center;gap:9px;padding:5px 0;cursor:pointer}
+.cb-item input{accent-color:var(--red);width:15px;height:15px}
+.cb-item label{font-size:14px;cursor:pointer;flex:1}
+.cb-item span{font-size:12px;color:var(--gray)}
+.range-wrap{padding:4px 0}
+input[type=range]{width:100%;accent-color:var(--red);margin:6px 0}
+.range-val{display:flex;justify-content:space-between;font-size:13px;color:var(--gray)}
+.range-cur{font-weight:700;color:var(--red);font-size:14px;margin-top:4px}
+
+/* 双 handle 价格范围滑块 */
+.price-dual{position:relative;height:36px;margin-top:6px}
+.price-dual .track{position:absolute;left:0;right:0;top:16px;height:4px;background:var(--gray-light);border-radius:2px}
+.price-dual .track-fill{position:absolute;top:16px;height:4px;background:var(--red);border-radius:2px;pointer-events:none}
+.price-dual input[type=range]{position:absolute;left:0;right:0;top:10px;width:100%;height:16px;background:none;margin:0;pointer-events:none;-webkit-appearance:none;appearance:none}
+.price-dual input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--red);cursor:pointer;pointer-events:auto;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.price-dual input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:#fff;border:3px solid var(--red);cursor:pointer;pointer-events:auto}
+.price-dual input[type=range]::-webkit-slider-runnable-track{background:transparent}
+.price-range-label{display:flex;justify-content:space-between;font-size:13px;margin-top:2px}
+.price-range-label strong{color:var(--red);font-weight:700}
+
+/* 星级评分点选 */
+.star-rating{display:flex;gap:6px;margin-top:6px}
+.star-rating button{width:36px;height:36px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:13px;font-weight:700;color:var(--gray);transition:.15s;font-family:inherit}
+.star-rating button.on,.star-rating button:hover{border-color:var(--red);background:var(--red-light);color:var(--red)}
+.star-rating button .sm{font-size:10px;display:block;margin-top:-2px}
+
+/* 加载骨架 */
+.sk-card{background:#fff;border-radius:12px;height:340px;overflow:hidden;position:relative;border:1px solid var(--border)}
+.sk-card::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:shimmer 1.3s infinite}
+@keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+
+/* 筛选 chip（汇总显示当前已应用的筛选）*/
+.active-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.chip{background:var(--red-light);color:var(--red);padding:5px 10px;border-radius:14px;font-size:12px;font-weight:600;display:inline-flex;align-items:center;gap:5px;cursor:pointer;border:1px solid #fecaca}
+.chip:hover{background:#fee2e2}
+.chip .x{font-size:14px;font-weight:900;line-height:1}
+.main-area{}
+.results-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.results-count{font-size:16px;font-weight:700;color:var(--navy)}
+.results-count em{color:var(--red);font-style:normal}
+.sort-select{padding:8px 14px;border:2px solid var(--border);border-radius:20px;font-size:14px;font-family:inherit;color:var(--navy);outline:none;background:#fff;cursor:pointer}
+.tag-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tag-filter{padding:7px 15px;border:2px solid var(--border);border-radius:20px;font-size:13px;font-weight:600;cursor:pointer;background:#fff;color:var(--navy);transition:.15s;font-family:inherit}
+.tag-filter:hover,.tag-filter.on{border-color:var(--red);color:var(--red);background:var(--red-light)}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.list-view .sc{display:flex;flex-direction:row;max-height:160px}
+.list-view .sc-photo{width:180px;height:auto;flex-shrink:0}
+.list-view .sc-body{flex:1}
+.view-toggle{display:flex;gap:6px}
+.vt-btn{width:34px;height:34px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;display:grid;place-items:center;font-size:16px;transition:.15s}
+.vt-btn.on{border-color:var(--red);background:var(--red-light)}
+.no-result{text-align:center;padding:60px 20px;grid-column:1/-1}
+.no-result-ico{font-size:64px;margin-bottom:14px}
+.no-result h3{font-size:20px;font-weight:800;color:var(--navy);margin-bottom:6px}
+.no-result p{color:var(--gray)}
+.pagination{display:flex;gap:8px;justify-content:center;margin-top:32px}
+.page-btn{width:38px;height:38px;border:2px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:14px;font-weight:700;display:grid;place-items:center;transition:.15s;font-family:inherit;color:var(--navy)}
+.page-btn:hover,.page-btn.on{border-color:var(--red);color:var(--red);background:var(--red-light)}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.sidebar{position:static}}
+@media(max-width:640px){.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-logo brand-logo-link"><img src="/assets/brand-logo.png" alt="爪小爱" class="brand-logo-img"></a>
+    <ul class="nav-links">
+      <li><a href="sitters.html" class="on">找服务者</a></li>
+      <li><a href="index.html#services">服务项目</a></li>
+      <li><a href="index.html#how-it-works">使用流程</a></li>
+      <li><a href="index.html#reviews">用户评价</a></li>
+      <li><a href="index.html" onclick="openModal('providerModal');return false">成为服务者</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn btn-ghost" onclick="openModal('loginModal')">登录</button>
+      <button class="btn btn-red" onclick="openModal('registerModal')">免费注册</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="wrap">
+    <h1 id="pageTitle">找到您信任的宠物服务者</h1>
+    <p id="pageSubtitle">全国认证服务者，实名核验，真实评价</p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="layout">
+
+    <!-- ── 侧边筛选栏 ── -->
+    <aside class="sidebar">
+      <h3>筛选条件 <button onclick="resetFilters()" style="font-size:12px;color:var(--red);font-weight:600;background:none;border:none;cursor:pointer">重置</button></h3>
+
+      <div class="fg-s">
+        <div class="fgt">城市</div>
+        <select class="fs" id="f-city" style="width:100%" onchange="applyFilters()">
+          <option value="">全部城市</option>
+          <option>北京</option><option>上海</option><option>广州</option>
+          <option>深圳</option><option>成都</option><option>杭州</option>
+          <option>武汉</option><option>南京</option><option>西安</option><option>重庆</option>
+        </select>
+      </div>
+
+      <div class="fg-s">
+        <div class="fgt">服务类型</div>
+        <div id="f-services">
+          <label class="cb-item"><input type="checkbox" value="遛狗"> <label>遛狗服务</label></label>
+          <label class="cb-item"><input type="checkbox" value="寄养"> <label>寄宿寄养</label></label>
+          <label class="cb-item"><input type="checkbox" value="上门"> <label>上门喂食</label></label>
+          <label class="cb-item"><input type="checkbox" value="日托"> <label>日托服务</label></label>
+          <label class="cb-item"><input type="checkbox" value="美容"> <label>宠物美容</label></label>
+          <label class="cb-item"><input type="checkbox" value="训练"> <label>宠物训练</label></label>
+        </div>
+      </div>
+
+      <div class="fg-s">
+        <div class="fgt">宠物类型</div>
+        <div>
+          <label class="cb-item"><input type="checkbox" value="小型犬" id="p-small"> <label for="p-small">小型犬</label></label>
+          <label class="cb-item"><input type="checkbox" value="中型犬" id="p-med">   <label for="p-med">中型犬</label></label>
+          <label class="cb-item"><input type="checkbox" value="大型犬" id="p-large"> <label for="p-large">大型犬</label></label>
+          <label class="cb-item"><input type="checkbox" value="猫咪"   id="p-cat">   <label for="p-cat">猫咪</label></label>
+          <label class="cb-item"><input type="checkbox" value="兔子"   id="p-rabbit"><label for="p-rabbit">兔子</label></label>
+        </div>
+      </div>
+
+      <div class="fg-s">
+        <div class="fgt">价格范围（¥/次）</div>
+        <div class="price-dual">
+          <div class="track"></div>
+          <div class="track-fill" id="priceFill"></div>
+          <input type="range" id="f-price-min" min="30" max="300" step="10" value="30" oninput="onPriceChange()">
+          <input type="range" id="f-price-max" min="30" max="300" step="10" value="300" oninput="onPriceChange()">
+        </div>
+        <div class="price-range-label">
+          <span>¥<strong id="priceMinLabel">30</strong></span>
+          <span>¥<strong id="priceMaxLabel">300</strong><span id="priceUnlimited">+</span></span>
+        </div>
+      </div>
+
+      <div class="fg-s">
+        <div class="fgt">最低评分</div>
+        <div class="star-rating" id="ratingStars">
+          <button type="button" onclick="setRating(0)" data-val="0">不限</button>
+          <button type="button" onclick="setRating(4)" data-val="4">★4+<span class="sm">良好</span></button>
+          <button type="button" onclick="setRating(4.5)" data-val="4.5">★4.5+<span class="sm">优秀</span></button>
+          <button type="button" onclick="setRating(4.8)" data-val="4.8">★4.8+<span class="sm">顶级</span></button>
+        </div>
+      </div>
+
+      <div class="fg-s">
+        <div class="fgt">其他条件</div>
+        <label class="cb-item"><input type="checkbox" id="f-verified"> <label for="f-verified">仅显示已认证</label></label>
+        <label class="cb-item"><input type="checkbox" id="f-bg"> <label for="f-bg">已做背景调查</label></label>
+        <label class="cb-item"><input type="checkbox" id="f-avail"> <label for="f-avail">当前可预约</label></label>
+      </div>
+
+      <button class="btn btn-red" style="width:100%;justify-content:center" onclick="applyFilters()">应用筛选</button>
+    </aside>
+
+    <!-- ── 主区域 ── -->
+    <div class="main-area">
+      <!-- 快速标签 -->
+      <div class="tag-filters" id="quickFilters">
+        <button class="tag-filter on" onclick="quickFilter(this,'')">全部</button>
+        <button class="tag-filter" onclick="quickFilter(this,'遛狗')">🦮 遛狗</button>
+        <button class="tag-filter" onclick="quickFilter(this,'寄养')">🏠 寄养</button>
+        <button class="tag-filter" onclick="quickFilter(this,'上门')">🥣 上门喂食</button>
+        <button class="tag-filter" onclick="quickFilter(this,'日托')">☀️ 日托</button>
+        <button class="tag-filter" onclick="quickFilter(this,'美容')">✂️ 美容</button>
+      </div>
+
+      <!-- 已应用的筛选 chip -->
+      <div class="active-chips" id="activeChips"></div>
+
+      <div class="results-bar">
+        <div class="results-count">共找到 <em id="resultCount">0</em> 位服务者</div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <select class="sort-select" id="sortBy" onchange="applyFilters()">
+            <option value="rating">按评分排序</option>
+            <option value="price-asc">价格从低到高</option>
+            <option value="price-desc">价格从高到低</option>
+            <option value="reviews">按评价数排序</option>
+          </select>
+          <div class="view-toggle">
+            <button class="vt-btn on" id="gridBtn" onclick="setView('grid')" title="网格视图">⊞</button>
+            <button class="vt-btn"   id="listBtn" onclick="setView('list')" title="列表视图">☰</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-3" id="sittersGrid"></div>
+      <div class="pagination" id="pagination"></div>
+    </div>
+  </div>
+</div>
+
+<!-- 模态框（复用） -->
+<div class="mask" id="sitterModal">
+  <div class="modal" style="max-width:680px">
+    <div class="mh"><h2 id="sitterModalTitle">服务者详情</h2><button class="mc" onclick="closeModal('sitterModal')">×</button></div>
+    <div class="mb" id="sitterModalBody"></div>
+  </div>
+</div>
+<div class="mask" id="bookingModal">
+  <div class="modal" style="max-width:500px">
+    <div class="mh"><h2>预约服务</h2><button class="mc" onclick="closeModal('bookingModal')">×</button></div>
+    <div class="mb">
+      <div id="bk-sitter-info" style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--gray-light);border-radius:10px;margin-bottom:20px">
+        <img id="bk-ava" src="" style="width:52px;height:52px;border-radius:50%;object-fit:cover">
+        <div style="flex:1"><div id="bk-name" style="font-weight:800;font-size:17px"></div><div id="bk-svc" style="color:var(--gray);font-size:14px"></div></div>
+        <div id="bk-price" style="font-size:22px;font-weight:900;color:var(--red)"></div>
+      </div>
+      <div class="frow"><div class="fg"><label class="fl">您的姓名</label><input class="fi" id="bk-owner" placeholder="请输入姓名"></div><div class="fg"><label class="fl">联系电话</label><input class="fi" id="bk-phone" placeholder="手机号码"></div></div>
+      <div class="frow"><div class="fg"><label class="fl">宠物名称</label><input class="fi" id="bk-pet-name" placeholder="宠物的名字"></div><div class="fg"><label class="fl">宠物品种</label><input class="fi" id="bk-breed" placeholder="如：拉布拉多"></div></div>
+      <div class="frow"><div class="fg"><label class="fl">开始日期</label><input class="fi" type="date" id="bk-start"></div><div class="fg"><label class="fl">结束日期</label><input class="fi" type="date" id="bk-end"></div></div>
+      <div class="fg"><label class="fl">服务类型</label><select class="fs" id="bk-type"><option value="">请选择服务</option><option>寄宿寄养</option><option>遛狗服务</option><option>上门喂食</option><option>日托服务</option><option>宠物美容</option></select></div>
+      <div class="fg"><label class="fl">备注（可选）</label><textarea class="ft2" id="bk-note" placeholder="宠物特殊需求、喂食习惯..."></textarea></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="submitBooking()">确认预约</button>
+      <p style="text-align:center;font-size:13px;color:var(--gray);margin-top:10px">🛡️ 受爪小爱保障计划保护</p>
+    </div>
+  </div>
+</div>
+<div class="mask" id="loginModal">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h2>登录爪小爱</h2><button class="mc" onclick="closeModal('loginModal')">×</button></div>
+    <div class="mb">
+      <div class="fg"><label class="fl">手机号码</label><input class="fi" id="l-phone" placeholder="请输入手机号"></div>
+      <div class="fg"><label class="fl">密码</label><input class="fi" type="password" id="l-pwd" placeholder="请输入密码"></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="doLogin()">登录</button>
+    </div>
+  </div>
+</div>
+<div class="mask" id="registerModal">
+  <div class="modal" style="max-width:440px">
+    <div class="mh"><h2>免费注册</h2><button class="mc" onclick="closeModal('registerModal')">×</button></div>
+    <div class="mb">
+      <div class="frow"><div class="fg"><label class="fl">姓名</label><input class="fi" id="r-name" placeholder="您的真实姓名"></div><div class="fg"><label class="fl">手机号</label><input class="fi" id="r-phone" placeholder="手机号码"></div></div>
+      <div class="fg"><label class="fl">密码</label><input class="fi" type="password" id="r-pwd" placeholder="设置密码（至少6位）"></div>
+      <div class="fg"><label class="fl">我是</label><select class="fs" id="r-type"><option>宠物主人</option><option>宠物服务者</option></select></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="doRegister()">立即注册</button>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/sitters.js"></script>
+</body>
+</html>

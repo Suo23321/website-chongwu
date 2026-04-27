@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>服务者详情 - 爪小爱</title>
+<link rel="icon" href="/assets/favicon-paw.png">
+<link rel="stylesheet" href="css/style.css">
+<style>
+.profile-layout{display:grid;grid-template-columns:1fr 340px;gap:32px;padding:40px 0 72px;align-items:start}
+.profile-main{}
+.gallery{display:grid;grid-template-columns:1fr 1fr;gap:8px;border-radius:16px;overflow:hidden;margin-bottom:28px;height:340px}
+.gallery img{width:100%;height:100%;object-fit:cover;cursor:pointer;transition:.3s}
+.gallery img:first-child{grid-row:1/3}
+.gallery img:hover{opacity:.88}
+.profile-head{display:flex;gap:20px;align-items:flex-start;margin-bottom:24px}
+.profile-ava{width:88px;height:88px;border-radius:50%;object-fit:cover;border:4px solid #fff;box-shadow:0 4px 16px rgba(0,0,0,.15);flex-shrink:0}
+.profile-name{font-size:28px;font-weight:900;color:var(--navy);margin-bottom:4px}
+.profile-loc{font-size:15px;color:var(--gray);display:flex;align-items:center;gap:5px;margin-bottom:10px}
+.badges-row{display:flex;gap:8px;flex-wrap:wrap}
+.profile-badge{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 12px;border-radius:20px}
+.pb-green {background:#f0fff4;color:#166534}
+.pb-blue  {background:#eff6ff;color:#1e40af}
+.pb-yellow{background:#fffbeb;color:#92400e}
+.rating-row{display:flex;align-items:center;gap:10px;margin:14px 0}
+.rating-stars{color:#f59e0b;font-size:22px}
+.rating-num{font-size:24px;font-weight:900;color:var(--navy)}
+.rating-cnt{color:var(--gray);font-size:15px}
+.section-title{font-size:19px;font-weight:800;color:var(--navy);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--border)}
+.stats-boxes{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:28px}
+.sb{background:var(--gray-light);border-radius:12px;padding:16px;text-align:center}
+.sb-num{font-size:26px;font-weight:900;color:var(--red)}
+.sb-lbl{font-size:13px;color:var(--gray);margin-top:3px}
+.services-list{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:28px}
+.svc-item{background:var(--gray-light);border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px}
+.svc-item-ico{font-size:28px;flex-shrink:0}
+.svc-item-name{font-weight:700;font-size:15px;color:var(--navy)}
+.svc-item-price{font-size:13px;color:var(--red);font-weight:600;margin-top:2px}
+.review-item{padding:18px;border:1px solid var(--border);border-radius:12px;margin-bottom:14px;background:#fff}
+.review-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.review-ava{width:42px;height:42px;border-radius:50%;object-fit:cover}
+.review-user{font-weight:700;font-size:15px}
+.review-date{font-size:13px;color:var(--gray)}
+.review-stars{color:#f59e0b;font-size:14px;margin-top:2px}
+.review-text{font-size:15px;line-height:1.75;color:#374151}
+/* 预约侧栏 */
+.booking-card{background:#fff;border-radius:16px;padding:24px;box-shadow:var(--shadow-lg);border:1px solid var(--border);position:sticky;top:90px}
+.price-row{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}
+.price-main{font-size:32px;font-weight:900;color:var(--red)}
+.price-unit{font-size:15px;color:var(--gray)}
+.price-sub{font-size:13px;color:var(--gray);margin-bottom:18px}
+.bk-service-list{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.bk-svc{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border:2px solid var(--border);border-radius:10px;cursor:pointer;transition:.15s;font-size:14px}
+.bk-svc:hover,.bk-svc.on{border-color:var(--red);background:var(--red-light)}
+.bk-svc-name{font-weight:600;color:var(--navy)}
+.bk-svc-price{font-weight:800;color:var(--red)}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.guarantee-row{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
+.gr-item{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--gray)}
+.gr-ico{font-size:16px;flex-shrink:0}
+@media(max-width:960px){.profile-layout{grid-template-columns:1fr}.booking-card{position:static}.gallery{height:240px}.stats-boxes{grid-template-columns:repeat(2,1fr)}.services-list{grid-template-columns:1fr}}
+@media(max-width:640px){.gallery{grid-template-columns:1fr;height:200px}.gallery img:first-child{grid-row:auto}.profile-head{flex-direction:column}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="wrap nav-inner">
+    <a href="index.html" class="nav-logo brand-logo-link"><img src="/assets/brand-logo.png" alt="爪小爱" class="brand-logo-img"></a>
+    <ul class="nav-links">
+      <li><a href="sitters.html">找服务者</a></li>
+      <li><a href="index.html#services">服务项目</a></li>
+      <li><a href="index.html#how-it-works">使用流程</a></li>
+      <li><a href="index.html#reviews">用户评价</a></li>
+    </ul>
+    <div class="nav-right">
+      <button class="btn btn-ghost" onclick="openModal('loginModal')">登录</button>
+      <button class="btn btn-red"   onclick="openModal('registerModal')">免费注册</button>
+    </div>
+  </div>
+</nav>
+
+<!-- 面包屑 -->
+<div style="background:#fff;border-bottom:1px solid var(--border);padding:12px 0">
+  <div class="wrap" style="font-size:14px;color:var(--gray)">
+    <a href="index.html" style="color:var(--red)">首页</a> ›
+    <a href="sitters.html" style="color:var(--red)">找服务者</a> ›
+    <span id="breadName">服务者详情</span>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="profile-layout">
+
+    <!-- 左侧主内容 -->
+    <div class="profile-main">
+
+      <!-- 图片画廊 -->
+      <div class="gallery" id="gallery">
+        <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=700" alt="照片">
+        <img src="https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=400" alt="照片">
+        <img src="https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=400" alt="照片">
+      </div>
+
+      <!-- 作品照片墙 -->
+      <div id="photo-wall-section" style="margin-bottom:28px;display:none">
+        <div class="section-title">📸 照料日常</div>
+        <div class="photo-wall" id="photo-wall"></div>
+      </div>
+
+      <!-- 基本信息 -->
+      <div class="profile-head">
+        <img class="profile-ava" id="p-avatar" src="" alt="">
+        <div style="flex:1">
+          <div class="profile-name" id="p-name">加载中...</div>
+          <div class="profile-loc">📍 <span id="p-location"></span></div>
+          <div class="badges-row" id="p-badges"></div>
+          <div class="rating-row">
+            <span class="rating-stars" id="p-stars"></span>
+            <span class="rating-num" id="p-rating"></span>
+            <span class="rating-cnt" id="p-reviews"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 统计数字 -->
+      <div class="stats-boxes">
+        <div class="sb"><div class="sb-num" id="s-exp">0</div><div class="sb-lbl">年照料经验</div></div>
+        <div class="sb"><div class="sb-num" id="s-clients">0</div><div class="sb-lbl">回头客</div></div>
+        <div class="sb"><div class="sb-num" id="s-reviews">0</div><div class="sb-lbl">真实评价</div></div>
+        <div class="sb"><div class="sb-num" id="s-response">—</div><div class="sb-lbl">响应时间</div></div>
+      </div>
+
+      <!-- 关于我 -->
+      <div style="margin-bottom:28px">
+        <div class="section-title">关于我</div>
+        <p style="font-size:16px;line-height:1.85;color:#374151" id="p-bio"></p>
+      </div>
+
+      <!-- 提供服务 -->
+      <div style="margin-bottom:28px">
+        <div class="section-title">提供的服务</div>
+        <div class="services-list" id="p-services"></div>
+      </div>
+
+      <!-- 接受的宠物 -->
+      <div style="margin-bottom:28px">
+        <div class="section-title">接受的宠物类型</div>
+        <div style="display:flex;flex-wrap:wrap;gap:10px" id="p-pets"></div>
+      </div>
+
+      <!-- 接单日历 -->
+      <div id="calendar-section" style="margin-bottom:28px">
+        <div class="section-title">📅 档期日历</div>
+        <div class="calendar-wrap">
+          <div class="cal-head">
+            <div class="cal-title">未来档期（点击预约前请先查看）</div>
+            <div class="cal-nav">
+              <button onclick="calMove(-1)">‹</button>
+              <span class="cal-month" id="cal-month">—</span>
+              <button onclick="calMove(1)">›</button>
+            </div>
+          </div>
+          <div class="cal-grid" id="cal-grid"></div>
+          <div class="cal-legend">
+            <span><i style="background:#ecfdf5;border:1px solid #a7f3d0"></i> 可预约</span>
+            <span><i style="background:#fef3c7"></i> 待确认</span>
+            <span><i style="background:#fee2e2"></i> 进行中</span>
+            <span><i style="background:#e0e7ff"></i> 已完成</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 评价 -->
+      <div>
+        <div class="section-title" id="reviews-title">用户评价</div>
+
+        <!-- 评分分布 -->
+        <div class="rating-dist" id="rating-dist" style="display:none"></div>
+
+        <!-- 筛选 -->
+        <div class="review-filters" id="review-filters" style="display:none">
+          <button class="rf-btn on" data-r="0" onclick="filterReviews(0)">全部</button>
+          <button class="rf-btn" data-r="5" onclick="filterReviews(5)">★5</button>
+          <button class="rf-btn" data-r="4" onclick="filterReviews(4)">★4</button>
+          <button class="rf-btn" data-r="3" onclick="filterReviews(3)">★3</button>
+          <button class="rf-btn" data-r="2" onclick="filterReviews(2)">★2</button>
+          <button class="rf-btn" data-r="1" onclick="filterReviews(1)">★1</button>
+        </div>
+
+        <div id="p-reviews-list"></div>
+        <div id="no-reviews" style="display:none;text-align:center;padding:32px;color:var(--gray)">
+          <div style="font-size:40px;margin-bottom:10px">📝</div>
+          <div>暂无评价，快来成为第一个评价的人！</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- 右侧预约卡 -->
+    <div>
+      <div class="booking-card">
+        <div class="price-row">
+          <div class="price-main" id="bk-price">¥—</div>
+          <div class="price-unit">起/次</div>
+        </div>
+        <div class="price-sub" id="bk-rating-line"></div>
+
+        <div style="font-size:13px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px">选择服务</div>
+        <div class="bk-service-list" id="bk-services"></div>
+
+        <button class="btn btn-red btn-lg" style="width:100%;justify-content:center;font-size:16px" onclick="openModal('bookingModal')">
+          立即预约
+        </button>
+
+        <div class="divider"></div>
+
+        <div class="guarantee-row">
+          <div class="gr-item"><span class="gr-ico">🛡️</span> 爪小爱保障计划保护每一笔预约</div>
+          <div class="gr-item"><span class="gr-ico">📸</span> 每日照片和视频更新</div>
+          <div class="gr-item"><span class="gr-ico">✅</span> 实名认证，背景调查</div>
+          <div class="gr-item"><span class="gr-ico">💬</span> 24小时客服支持</div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:13px" onclick="showToast('消息功能即将上线 💬')">💬 发消息</button>
+          <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:13px" onclick="showToast('已收藏该服务者 ❤️')">❤️ 收藏</button>
+        </div>
+      </div>
+
+      <!-- 安全提示 -->
+      <div style="background:#f0fdf4;border:1px solid #bbf7d0;border-radius:12px;padding:16px;margin-top:16px">
+        <div style="font-weight:800;color:#166534;margin-bottom:8px;font-size:14px">🔒 爪小爱安全保障</div>
+        <div style="font-size:13px;color:#166534;line-height:1.7">所有服务均通过平台预约和支付，资金受平台保护，服务完成后自动结算给服务者。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 预约模态 -->
+<div class="mask" id="bookingModal">
+  <div class="modal" style="max-width:500px">
+    <div class="mh"><h2>预约服务</h2><button class="mc" onclick="closeModal('bookingModal')">×</button></div>
+    <div class="mb">
+      <div id="bk-sitter-info" style="display:flex;align-items:center;gap:14px;padding:14px;background:var(--gray-light);border-radius:10px;margin-bottom:20px">
+        <img id="bk-ava" src="" style="width:52px;height:52px;border-radius:50%;object-fit:cover">
+        <div style="flex:1"><div id="bk-name" style="font-weight:800;font-size:17px"></div><div id="bk-svc" style="color:var(--gray);font-size:14px"></div></div>
+        <div id="bk-price-display" style="font-size:22px;font-weight:900;color:var(--red)"></div>
+      </div>
+      <div class="frow"><div class="fg"><label class="fl">您的姓名</label><input class="fi" id="bk-owner" placeholder="请输入姓名"></div><div class="fg"><label class="fl">联系电话</label><input class="fi" id="bk-phone" placeholder="手机号码"></div></div>
+      <div class="frow"><div class="fg"><label class="fl">宠物名称</label><input class="fi" id="bk-pet-name" placeholder="宠物的名字"></div><div class="fg"><label class="fl">宠物品种</label><input class="fi" id="bk-breed" placeholder="如：拉布拉多"></div></div>
+      <div class="frow"><div class="fg"><label class="fl">开始日期</label><input class="fi" type="date" id="bk-start"></div><div class="fg"><label class="fl">结束日期</label><input class="fi" type="date" id="bk-end"></div></div>
+      <div class="fg"><label class="fl">服务类型</label><select class="fs" id="bk-type"><option value="">请选择服务</option><option>寄宿寄养</option><option>遛狗服务</option><option>上门喂食</option><option>日托服务</option><option>宠物美容</option></select></div>
+      <div class="fg"><label class="fl">备注（可选）</label><textarea class="ft2" id="bk-note" placeholder="宠物特殊需求、喂食习惯..."></textarea></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="submitBooking()">确认预约</button>
+      <p style="text-align:center;font-size:13px;color:var(--gray);margin-top:10px">🛡️ 受爪小爱保障计划保护</p>
+    </div>
+  </div>
+</div>
+
+<!-- 登录 -->
+<div class="mask" id="loginModal">
+  <div class="modal" style="max-width:420px">
+    <div class="mh"><h2>登录爪小爱</h2><button class="mc" onclick="closeModal('loginModal')">×</button></div>
+    <div class="mb">
+      <div class="fg"><label class="fl">手机号码</label><input class="fi" id="l-phone" placeholder="请输入手机号"></div>
+      <div class="fg"><label class="fl">密码</label><input class="fi" type="password" id="l-pwd" placeholder="请输入密码"></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="doLogin()">登录</button>
+    </div>
+  </div>
+</div>
+
+<!-- 注册 -->
+<div class="mask" id="registerModal">
+  <div class="modal" style="max-width:440px">
+    <div class="mh"><h2>免费注册</h2><button class="mc" onclick="closeModal('registerModal')">×</button></div>
+    <div class="mb">
+      <div class="frow"><div class="fg"><label class="fl">姓名</label><input class="fi" id="r-name" placeholder="您的真实姓名"></div><div class="fg"><label class="fl">手机号</label><input class="fi" id="r-phone" placeholder="手机号码"></div></div>
+      <div class="fg"><label class="fl">密码</label><input class="fi" type="password" id="r-pwd" placeholder="设置密码（至少6位）"></div>
+      <div class="fg"><label class="fl">我是</label><select class="fs" id="r-type"><option>宠物主人</option><option>宠物服务者</option></select></div>
+      <button class="btn btn-red btn-lg" style="width:100%;justify-content:center" onclick="doRegister()">立即注册</button>
+    </div>
+  </div>
+</div>
+
+<!-- 照片查看灯箱 -->
+<div class="pw-lightbox" id="pwLightbox" onclick="closeLightbox()">
+  <button class="pw-lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="pwLightboxImg" src="" alt="">
+</div>
+
+<div class="toast" id="toast"><span id="toastMsg"></span></div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+const SVC_PRICES = { 遛狗:70, 上门喂食:65, 宠物寄养:90, 日托:80, 猫咪寄养:85, 上门服务:75, 宠物美容:120, 宠物训练:150 };
+
+/* 后备照片池（当服务者无照片时使用） */
+const FALLBACK_PHOTOS = [
+  'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=500',
+  'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=500',
+  'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=500',
+  'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=500',
+  'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=500',
+  'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?w=500',
+  'https://images.unsplash.com/photo-1517849845537-4d257902454a?w=500',
+  'https://images.unsplash.com/photo-1477884213360-7e9d7dcc1e48?w=500',
+  'https://images.unsplash.com/photo-1552053831-71594a27632d?w=500'
+];
+
+let _allReviews = [];
+let _calDate = new Date();   // 日历当前显示月份
+let _busyDays = {};
+
+async function bootProfile(){
+  const params = new URLSearchParams(location.search);
+  const id     = parseInt(params.get('id'));
+  if (!id) { document.getElementById('p-name').textContent='未指定服务者 ID'; return; }
+
+  let sitter = null;
+  try {
+    const r = await fetch('/api/sitters/' + id);
+    if (!r.ok) throw new Error('未找到');
+    const j = await r.json();
+    sitter = j.data;
+  } catch(e) {
+    document.getElementById('p-name').textContent = '未找到该服务者';
+    return;
+  }
+  if (!sitter) { document.getElementById('p-name').textContent='未找到该服务者'; return; }
+
+  document.title = sitter.name + ' - 爪小爱';
+  document.getElementById('breadName').textContent = sitter.name;
+
+  // 画廊 (gallery 顶部 3 张)
+  const photos = (sitter.photos && sitter.photos.length)
+    ? sitter.photos
+    : FALLBACK_PHOTOS.slice(0, 6);
+  const gal = photos.slice(0, 3);
+  while (gal.length < 3) gal.push(sitter.avatar || FALLBACK_PHOTOS[0]);
+  document.getElementById('gallery').innerHTML = gal.map((p,i)=>
+    `<img src="${p}" alt="照片${i+1}" onclick="openLightbox('${p}')"${i===0?' style="grid-row:1/3"':''}>`
+  ).join('');
+
+  // 照片墙（最多 9 张）
+  const wallPhotos = photos.slice(0, 9);
+  if (wallPhotos.length < 6) {
+    // 凑够至少 6 张
+    let idx = 0;
+    while (wallPhotos.length < 6 && idx < FALLBACK_PHOTOS.length) {
+      if (!wallPhotos.includes(FALLBACK_PHOTOS[idx])) wallPhotos.push(FALLBACK_PHOTOS[idx]);
+      idx++;
+    }
+  }
+  if (wallPhotos.length) {
+    document.getElementById('photo-wall-section').style.display='block';
+    document.getElementById('photo-wall').innerHTML = wallPhotos.map(p=>
+      `<div class="pw-item" onclick="openLightbox('${p}')"><img src="${p}" alt="照料日常"></div>`
+    ).join('');
+  }
+
+  // 基本信息
+  document.getElementById('p-avatar').src   = sitter.avatar || '';
+  document.getElementById('p-name').textContent = sitter.name;
+  document.getElementById('p-location').textContent = sitter.location || '';
+  document.getElementById('p-stars').textContent = stars(sitter.rating||0);
+  document.getElementById('p-rating').textContent = (sitter.rating||0).toFixed(1);
+  const revCnt = sitter.review_count ?? sitter.reviewCount ?? 0;
+  document.getElementById('p-reviews').textContent = `(${revCnt}条评价)`;
+
+  // 徽章
+  const bgCheck = sitter.background_check ?? sitter.backgroundCheck;
+  const respTime = sitter.response_time ?? sitter.responseTime;
+  let bHTML='';
+  if(sitter.verified) bHTML+=`<span class="profile-badge pb-green">✔ 实名认证</span>`;
+  if(bgCheck)         bHTML+=`<span class="profile-badge pb-blue">🔍 背景调查</span>`;
+  if(respTime)        bHTML+=`<span class="profile-badge pb-yellow">⚡ ${esc(respTime)}响应</span>`;
+  document.getElementById('p-badges').innerHTML=bHTML;
+
+  // 统计
+  document.getElementById('s-exp').textContent      = sitter.years_experience ?? sitter.yearsExperience ?? 0;
+  document.getElementById('s-clients').textContent  = sitter.repeat_clients ?? sitter.repeatClients ?? 0;
+  document.getElementById('s-reviews').textContent  = revCnt;
+  document.getElementById('s-response').textContent = respTime || '—';
+
+  // 简介
+  document.getElementById('p-bio').textContent = sitter.bio||'暂无简介';
+
+  // 服务
+  const svcs = sitter.services||[];
+  document.getElementById('p-services').innerHTML = svcs.map(s=>`
+    <div class="svc-item">
+      <div class="svc-item-ico">${svcIcon(s)}</div>
+      <div><div class="svc-item-name">${esc(s)}</div><div class="svc-item-price">¥${SVC_PRICES[s]||sitter.price}/次起</div></div>
+    </div>`).join('');
+
+  // 宠物
+  document.getElementById('p-pets').innerHTML = (sitter.pets||[]).map(p=>`
+    <div style="display:flex;align-items:center;gap:8px;background:var(--gray-light);padding:10px 16px;border-radius:10px;font-size:14px;font-weight:600">
+      ${petIcon(p)} ${esc(p)}
+    </div>`).join('');
+
+  // 评价（兼容 snake_case 和 camelCase）
+  _allReviews = (sitter.reviews||[]).map(r => ({
+    user:   r.user   || r.user_name   || '匿名用户',
+    avatar: r.avatar || '',
+    rating: r.rating || 0,
+    text:   r.text   || r.review_text || '',
+    date:   r.date   || (r.created_at ? String(r.created_at).slice(0,10) : ''),
+  }));
+  document.getElementById('reviews-title').textContent = `用户评价（${_allReviews.length}条）`;
+  if (_allReviews.length) {
+    renderRatingDist(_allReviews);
+    document.getElementById('review-filters').style.display='flex';
+    renderReviews(_allReviews);
+  } else {
+    document.getElementById('no-reviews').style.display='block';
+  }
+
+  // 预约侧栏
+  document.getElementById('bk-price').textContent = '¥'+sitter.price;
+  document.getElementById('bk-rating-line').textContent = `⭐ ${(sitter.rating||0).toFixed(1)} · ${revCnt}条评价`;
+  document.getElementById('bk-services').innerHTML = svcs.slice(0,4).map((s,i)=>`
+    <div class="bk-svc${i===0?' on':''}" onclick="selectSvc(this)">
+      <span class="bk-svc-name">${svcIcon(s)} ${esc(s)}</span>
+      <span class="bk-svc-price">¥${SVC_PRICES[s]||sitter.price}/次</span>
+    </div>`).join('');
+
+  // 预约信息
+  document.getElementById('bk-ava').src = sitter.avatar || '';
+  document.getElementById('bk-name').textContent = sitter.name;
+  document.getElementById('bk-svc').textContent  = svcs.join(' · ');
+  document.getElementById('bk-price-display').textContent = '¥'+sitter.price+'/次';
+  window._currentSitter = sitter;
+
+  // 加载日历
+  loadCalendar(id);
+}
+
+/* ========== 评分分布 ========== */
+function renderRatingDist(reviews){
+  const bucket = {5:0,4:0,3:0,2:0,1:0};
+  reviews.forEach(r=>{
+    const k = Math.max(1, Math.min(5, Math.round(r.rating||0)));
+    bucket[k]++;
+  });
+  const total = reviews.length;
+  const avg = (reviews.reduce((s,r)=>s+(r.rating||0),0)/total).toFixed(1);
+  let html = `
+    <div style="grid-column:1/-1;display:flex;align-items:center;gap:14px;padding-bottom:10px;border-bottom:1px solid #e5e7eb;margin-bottom:6px">
+      <div style="font-size:36px;font-weight:900;color:var(--navy)">${avg}</div>
+      <div><div style="color:#f59e0b;font-size:16px">${stars(avg)}</div><div style="color:var(--gray);font-size:13px">${total} 条真实评价</div></div>
+    </div>`;
+  [5,4,3,2,1].forEach(st=>{
+    const pct = total ? (bucket[st]/total*100).toFixed(0) : 0;
+    html += `
+      <div class="rd-label">${st}<small>★</small></div>
+      <div class="rd-bar"><div class="rd-bar-fill" style="width:${pct}%"></div></div>
+      <div class="rd-count">${bucket[st]}</div>`;
+  });
+  const el = document.getElementById('rating-dist');
+  el.innerHTML = html;
+  el.style.display = 'grid';
+}
+
+/* ========== 评价筛选 ========== */
+function filterReviews(star){
+  document.querySelectorAll('.rf-btn').forEach(b=>b.classList.toggle('on', +b.dataset.r===star));
+  const list = star===0 ? _allReviews : _allReviews.filter(r=>Math.round(r.rating||0)===star);
+  renderReviews(list);
+}
+
+function renderReviews(list){
+  const holder = document.getElementById('p-reviews-list');
+  const noRev  = document.getElementById('no-reviews');
+  if (!list.length){
+    holder.innerHTML='';
+    noRev.style.display='block';
+    noRev.querySelector('div:last-child').textContent='该星级暂无评价';
+    return;
+  }
+  noRev.style.display='none';
+  holder.innerHTML = list.map(r=>`
+    <div class="review-item">
+      <div class="review-top">
+        <img class="review-ava" src="${r.avatar||'https://i.pravatar.cc/42?img='+Math.floor(Math.random()*70+1)}" onerror="this.src='https://i.pravatar.cc/42'">
+        <div style="flex:1"><div class="review-user">${esc(r.user||'匿名用户')}</div><div class="review-date">${esc(r.date||'')}</div><div class="review-stars">${stars(r.rating||0)}</div></div>
+      </div>
+      <div class="review-text">${esc(r.text||'')}</div>
+    </div>`).join('');
+}
+
+/* ========== 接单日历 ========== */
+async function loadCalendar(sid){
+  try{
+    const r = await fetch('/api/sitters/'+sid+'/calendar');
+    const j = await r.json();
+    _busyDays = (j.data && j.data.busyDays) || {};
+  }catch(e){ _busyDays = {}; }
+  renderCal();
+}
+
+function calMove(delta){
+  _calDate.setMonth(_calDate.getMonth()+delta);
+  renderCal();
+}
+
+function renderCal(){
+  const y = _calDate.getFullYear(), m = _calDate.getMonth();
+  document.getElementById('cal-month').textContent = `${y}年${m+1}月`;
+  const first = new Date(y, m, 1);
+  const days = new Date(y, m+1, 0).getDate();
+  const wkStart = first.getDay(); // 0=Sun
+  const today = new Date(); today.setHours(0,0,0,0);
+
+  let html = ['日','一','二','三','四','五','六'].map(w=>`<div class="cal-wk">${w}</div>`).join('');
+  for (let i=0;i<wkStart;i++) html += `<div class="cal-day empty"></div>`;
+
+  for (let d=1; d<=days; d++){
+    const dt = new Date(y, m, d);
+    const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isPast = dt < today;
+    const isToday = dt.getTime() === today.getTime();
+    const busy = _busyDays[key];
+
+    let cls = 'cal-day';
+    if (isToday) cls += ' today';
+    if (busy) {
+      cls += ' busy-' + busy.status;
+    } else if (isPast) {
+      cls += ' past';
+    } else {
+      cls += ' free';
+    }
+    const title = busy ? `${busy.status}（${busy.count}单）` : (isPast?'已过':'可预约');
+    html += `<div class="${cls}" title="${title}">${d}</div>`;
+  }
+  document.getElementById('cal-grid').innerHTML = html;
+}
+
+/* ========== 照片灯箱 ========== */
+function openLightbox(src){
+  document.getElementById('pwLightboxImg').src = src;
+  document.getElementById('pwLightbox').classList.add('on');
+}
+function closeLightbox(){
+  document.getElementById('pwLightbox').classList.remove('on');
+}
+
+function selectSvc(el){
+  document.querySelectorAll('.bk-svc').forEach(b=>b.classList.remove('on'));
+  el.classList.add('on');
+}
+function svcIcon(s){ const m={遛狗:'🦮',上门喂食:'🥣',宠物寄养:'🏠',猫咪寄养:'🐱',日托:'☀️',上门服务:'🚪',宠物美容:'✂️',宠物训练:'🎓',日托服务:'☀️'}; return m[s]||'🐾'; }
+function petIcon(p){ const m={小型犬:'🐩',中型犬:'🐕',大型犬:'🦮',猫咪:'🐱',兔子:'🐰',鸟类:'🐦'}; return m[p]||'🐾'; }
+function doLogin(){ const p=document.getElementById('l-phone').value,pw=document.getElementById('l-pwd').value; if(!p||!pw){showToast('请输入手机号和密码','⚠️');return;} closeModal('loginModal'); showToast('登录成功！欢迎回来 🎉'); }
+function doRegister(){ const n=document.getElementById('r-name').value.trim(),p=document.getElementById('r-phone').value.trim(),pw=document.getElementById('r-pwd').value.trim(); if(!n||!p||!pw){showToast('请填写完整信息','⚠️');return;} if(pw.length<6){showToast('密码至少6位','⚠️');return;} DB.addUser({name:n,phone:p.replace(/(\d{3})\d{4}(\d{4})/,'$1****$2'),type:document.getElementById('r-type').value,avatar:'https://i.pravatar.cc/40?img='+Math.floor(Math.random()*70+1)}); closeModal('registerModal'); showToast('注册成功！欢迎加入爪小爱 🎉'); }
+
+bootProfile();
+</script>
+</body>
+</html>

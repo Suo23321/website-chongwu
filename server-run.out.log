@@ -1,0 +1,12 @@
+📜 已加载 3 份协议: sitter_commitment@2026-04-24-v1, sitter_truthfulness@2026-04-24-v1, sitter_welfare@2026-04-24-v1
+💰 担保交易相关表 / 字段 已就绪（bookings + payments + settlements + disputes + sitter_wallets + wallet_transactions）
+✅ 数据库初始化完成： D:\codex\宠物服务平台12\database\pawcare.db
+⏰ 担保交易调度器已启动（每 60 秒扫描一次）
+
+🐾 爪小爱服务平台已启动！
+
+   前台地址：http://localhost:3000
+   管理后台：http://localhost:3000/pawcare-admin-2026/login
+
+   注意：管理后台地址请保密，不要对外公开
+
